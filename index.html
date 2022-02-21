@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Utiles</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+   <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <div class="container">
+    <div id="lista-compras">
+        <div>
+        <h1>{{ header.toLocaleUpperCase() }}</h1>
+        <button v-if="estado === 'default'" class="btn btn-success" @click="cambiarEstado('edit')">Agregar</button>
+        <button v-else class="btn btn-danger" @click="cambiarEstado('default')">Cancelar</button>
+
+        </div>
+        <!-- <h1>{{ header ? header:"Bienvenido" }}</h1> -->
+        <div v-if="estado === 'edit'">
+            <input type="text" placeholder="Agregar Nuevo" v-model="newUtil" @keyup.enter="guardarElemento">
+            <p>{{cantidadCaracteres}}/200</p>
+            <button :disabled="newUtil.length === 0" class="btn btn-primary" @click="guardarElemento">Guardar elemento</button>
+        </div>
+        <!-- <a v-bind:href="newUtil" target="_blank">Enlace dinámico</a> -->
+        <ul>
+            <li v-for="elemento in listarReversa" :class="{tachado : elemento.comprado}" @click="cambiarEstadoCompra(elemento)">{{ elemento.util }}</li>
+        </ul>
+        <p v-if="utiles.length === 0"> No existen elementos en la lista</p>
+
+    </div>
+</div>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script>
+        var app = new Vue({
+            el:'#lista-compras',
+            data:{
+                header:'Listado de utiles',
+                newUtil:'',
+                estado:'default',
+                utiles:[
+                    {util:'10 cuadernos',
+                     comprado:true
+                    },
+                    {util:'15 lapices',
+                     comprado:true
+                    },
+                    {util:'5 cajas de colores',
+                     comprado:false
+                    }]
+            },
+            methods:{
+                guardarElemento:function(){
+                    this.utiles.push({
+                        util: this.newUtil,
+                        comprado:false
+                    });
+                    this.newUtil = '';
+                },
+                cambiarEstado:function(newEstado){
+                    this.estado = newEstado;
+                    this.newUtil = '';
+                },
+                cambiarEstadoCompra(util){
+                    util.comprado = !util.comprado;
+                }
+
+            },
+            computed:{
+                listarReversa:function(){
+                    return this.utiles.slice(0).reverse();
+                }
+            },
+
+
+        });
+     </script>
+   
+   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+</html>
